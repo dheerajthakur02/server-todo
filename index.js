@@ -12,7 +12,7 @@ const corsOptions = {
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const mongoURI = process.env.MONGODB_URI;
