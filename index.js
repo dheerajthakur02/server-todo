@@ -75,5 +75,7 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// Export the app for serverless deployment
-export default app;
+
+app.listen(3001, () => {
+    console.log('Server is running on port 3001');
+});
