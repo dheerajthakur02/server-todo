@@ -10,10 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect(mongoURI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB:', err));
+
 
 app.get('/get', (req, res) => {
     TodoModel.find()
@@ -42,6 +42,4 @@ app.delete('/delete/:id', (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
-app.listen(3001, () => {
-    console.log('Server is running on port 3001');
-});
+export default app;
