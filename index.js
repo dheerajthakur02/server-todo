@@ -1,45 +1,78 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
 import dotenv from 'dotenv';
-const TodoModel = require('./Models/Todo');
-const app = express();
+import TodoModel from '../../Models/Todo.js'; // Adjust path as per your folder structure
 
 dotenv.config();
+const app = express();
+
 app.use(cors());
 app.use(express.json());
 
 const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Failed to connect to MongoDB:', err));
 
+let isConnected = false; // Tracks the MongoDB connection status
 
-app.get('/get', (req, res) => {
-    TodoModel.find()
-        .then(result => res.json(result))
-        .catch(err => res.status(500).json(err));
+// Middleware to ensure MongoDB connection for each request
+const connectToDB = async () => {
+    if (!isConnected) {
+        try {
+            await mongoose.connect(mongoURI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            });
+            isConnected = true;
+            console.log('Connected to MongoDB');
+        } catch (error) {
+            console.error('Failed to connect to MongoDB:', error);
+        }
+    }
+};
+
+app.use(async (req, res, next) => {
+    await connectToDB();
+    next();
 });
 
-app.put('/update/:id', (req, res) => {
+// Routes
+app.get('/get', async (req, res) => {
+    try {
+        const todos = await TodoModel.find();
+        res.json(todos);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+app.put('/update/:id', async (req, res) => {
     const { id } = req.params;
-    TodoModel.findByIdAndUpdate(id, { done: true }, { new: true })
-        .then(result => res.json(result))
-        .catch(err => res.status(500).json(err));
+    try {
+        const updatedTodo = await TodoModel.findByIdAndUpdate(id, { done: true }, { new: true });
+        res.json(updatedTodo);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
-app.post('/add', (req, res) => {
+app.post('/add', async (req, res) => {
     const { task } = req.body;
-    TodoModel.create({ task })
-        .then(result => res.json(result))
-        .catch(err => res.status(500).json(err));
+    try {
+        const newTodo = await TodoModel.create({ task });
+        res.json(newTodo);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
-app.delete('/delete/:id', (req, res) => {
+app.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
-    TodoModel.findByIdAndDelete(id)
-        .then(result => res.json(result))
-        .catch(err => res.status(500).json(err));
+    try {
+        const deletedTodo = await TodoModel.findByIdAndDelete(id);
+        res.json(deletedTodo);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
 export default app;
