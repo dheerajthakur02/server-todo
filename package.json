@@ -5,16 +5,18 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start":"nodemon index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.19.2",
+    "i": "^0.3.7",
     "mongoose": "^8.6.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.9",
+    "npm": "^10.9.2"
   }
 }
