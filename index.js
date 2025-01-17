@@ -1,13 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+import dotenv from 'dotenv';
 const TodoModel = require('./Models/Todo');
 const app = express();
 
+dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/test', {
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
