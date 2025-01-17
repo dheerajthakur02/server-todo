@@ -34,6 +34,9 @@ app.use(async (req, res, next) => {
     await connectToDB();
     next();
 });
+app.get("/", (req, res) => {
+  res.send("<h1>Server is working</h1>");
+});
 
 // Routes
 app.get('/get', async (req, res) => {
