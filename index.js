@@ -2,9 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import TodoModel from './Models/Todo.js'; // Adjust path as per your folder structure
+import TodoModel from './Models/Todo.js'; // Adjust path as needed
 
 dotenv.config();
+
 const app = express();
 
 app.use(cors());
@@ -12,9 +13,8 @@ app.use(express.json());
 
 const mongoURI = process.env.MONGODB_URI;
 
-let isConnected = false; // Tracks the MongoDB connection status
+let isConnected = false; // Track MongoDB connection status
 
-// Middleware to ensure MongoDB connection for each request
 const connectToDB = async () => {
     if (!isConnected) {
         try {
@@ -34,11 +34,8 @@ app.use(async (req, res, next) => {
     await connectToDB();
     next();
 });
-app.get("/", (req, res) => {
-  res.send("<h1>Server is working</h1>");
-});
 
-// Routes
+// Define routes
 app.get('/get', async (req, res) => {
     try {
         const todos = await TodoModel.find();
@@ -78,4 +75,5 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
+// Export the app for serverless deployment
 export default app;
