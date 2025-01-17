@@ -34,7 +34,9 @@ app.use(async (req, res, next) => {
     await connectToDB();
     next();
 });
-
+app.get("/", (req, res) => {
+  res.send("server is working");
+});
 // Define routes
 app.get('/get', async (req, res) => {
     try {
@@ -75,7 +77,4 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-
-app.listen(3001, () => {
-    console.log('Server is running on port 3001');
-});
+export default app;
