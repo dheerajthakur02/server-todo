@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import TodoModel from '../../Models/Todo.js'; // Adjust path as per your folder structure
+import TodoModel from './Models/Todo.js'; // Adjust path as per your folder structure
 
 dotenv.config();
 const app = express();
