@@ -18,17 +18,14 @@ let isConnected = false; // Track MongoDB connection status
 const connectToDB = async () => {
     if (!isConnected) {
         try {
-            await mongoose.connect(mongoURI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
+            await mongoose.connect(mongoURI); // Removed deprecated options
             isConnected = true;
             console.log('Connected to MongoDB');
         } catch (error) {
             console.error('Failed to connect to MongoDB:', error);
         }
     }
-};
+}
 
 app.use(async (req, res, next) => {
     await connectToDB();
@@ -36,6 +33,10 @@ app.use(async (req, res, next) => {
 });
 
 // Define routes
+app.get("/", (req, res) => {
+    res.send("<h1>Server is working</h1>");
+  });
+
 app.get('/get', async (req, res) => {
     try {
         const todos = await TodoModel.find();
