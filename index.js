@@ -7,7 +7,11 @@ import TodoModel from './Models/Todo.js'; // Adjust path as needed
 dotenv.config();
 
 const app = express();
-
+const corsOptions = {
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 app.use(cors());
 app.use(express.json());
 
